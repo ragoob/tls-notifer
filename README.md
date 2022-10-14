@@ -8,3 +8,8 @@ K8s operator that Monitor the SSL certificates on K8s that are not managed by ce
   - calling http API
   - Microsoft team channel 
   - Slack
+- Auto re-new certifiates by watching ingress and automatic pull the new TLS from 
+  - custom file server via download cert and key file using http 
+  - s3
+  - min.io
+  
