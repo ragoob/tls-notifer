@@ -3,7 +3,7 @@ K8s operator that Monitor the SSL certificates on K8s that are not managed by ce
 
 # Feature
 - Containous monitor certificates in the cluster
-- Define a CRD object for target certificates and provide diffrent alert mechansim
+- Define alert annotations for certificates and provide diffrent alert mechansim
 - Alert methods
   - calling http API
   - Microsoft team channel 
