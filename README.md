@@ -6,5 +6,5 @@ K8s operator that Monitor the SSL certificates on K8s that are not managed by ce
 - Define a CRD object for target certificates and provide diffrent alert mechansim
 - Alert methods
   - calling http API
-  - Microsoft team chanel 
+  - Microsoft team channel 
   - Slack
