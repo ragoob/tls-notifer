@@ -3,7 +3,9 @@ package pkg
 import (
 	"context"
 	"fmt"
-	"log"
+
+	log "github.com/sirupsen/logrus"
+
 	"os"
 	"sync"
 	"time"
@@ -22,7 +24,7 @@ type Tls struct {
 func (t *Tls) GetSecertsList() (*v1.SecretList, error) {
 	result, err := t.K8s.Client.CoreV1().Secrets(t.NameSpace).List(context.TODO(), metav1.ListOptions{})
 	if err != nil {
-		log.Printf("[Error] Could not get Secerts in nameSpace [%v] [%v]", t.NameSpace, err.Error())
+		log.Error("Could not get Secerts in nameSpace [%v] [%v]", t.NameSpace, err.Error())
 		return nil, err
 	}
 
@@ -38,7 +40,7 @@ func (t *Tls) Watch(wg *sync.WaitGroup, quit chan bool) {
 		case <-ticker.C:
 			result, err := t.GetSecertsList()
 			if err != nil {
-				log.Printf("[Error] [%v]", err.Error())
+				log.Error(err)
 			}
 
 			for _, v := range result.Items {
@@ -47,7 +49,7 @@ func (t *Tls) Watch(wg *sync.WaitGroup, quit chan bool) {
 					output, err := ParsePEM(v.Data["tls.crt"])
 
 					if err != nil {
-						log.Printf("[Error] %v", err)
+						log.Error(err)
 						continue
 					}
 
@@ -58,7 +60,7 @@ func (t *Tls) Watch(wg *sync.WaitGroup, quit chan bool) {
 							Domains:   c.DNSNames,
 							Path:      fmt.Sprintf("Kube-%s/%s/%s", os.Getenv("CLUSTER_NAME"), t.NameSpace, v.Name),
 							Issuer:    c.Issuer.CommonName,
-							ExpireIn:  fmt.Sprintf("%vd", int64(c.NotAfter.Sub(time.Now())/24)),
+							ExpireIn:  c.NotAfter.Sub(time.Now()).Hours() / 24,
 						})
 					}
 

@@ -10,5 +10,5 @@ type Certificate struct {
 	NotBefore time.Time `json:"notBefore"`
 	Path      string    `json:"path"`
 	Issuer    string    `json:"issuer"`
-	ExpireIn  string    `json:"expireIn"`
+	ExpireIn  float64   `json:"expireIn"`
 }
